@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar } from './Navbar';
-import heroFounderPhoto from '../../assets/images/hero_founder.jpg';
+import fallbackFounderPhoto from '../../assets/images/hero_founder.jpg';
+
+// UBAH NAMA FOTO ANDA DI SINI
+// Cukup letakkan foto baru di folder: public/images/nama-foto-anda.jpg
+const HERO_PHOTO_PATH = '/images/hero_founder.png';
 
 interface HeroProps {
   onOpenContact: (subject: string) => void;
@@ -10,6 +14,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact }) => {
   const [directionsCount, setDirectionsCount] = useState(0);
   const [initiativesCount, setInitiativesCount] = useState(0);
   const [photoTranslateY, setPhotoTranslateY] = useState(0);
+  const [imgSrc, setImgSrc] = useState<string>(HERO_PHOTO_PATH);
 
   useEffect(() => {
     // Eased count up
@@ -106,7 +111,13 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact }) => {
         <div className="hero-mobile-visual-stage">
           <div className="hero-photo-wrap" id="hero-photo-wrap">
             <img
-              src={heroFounderPhoto}
+              src={imgSrc}
+              onError={() => {
+                // Jika foto baru gagal dimuat / salah nama, otomatis fallback ke cadangan aman (tidak akan crash)
+                if (imgSrc !== fallbackFounderPhoto) {
+                  setImgSrc(fallbackFounderPhoto);
+                }
+              }}
               alt="Monochromatic editorial portrait of technology founder seen from behind in a technical jacket"
               className="hero-photo"
               id="hero-photo"
@@ -282,4 +293,3 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact }) => {
     </section>
   );
 };
-
