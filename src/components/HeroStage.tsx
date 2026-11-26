@@ -100,27 +100,27 @@ export function HeroStage({ onNavigate, onOpenDialogue }: HeroStageProps) {
         }}
       />
 
-      <div className="relative z-10 mx-auto grid max-w-[1220px] grid-cols-1 items-center gap-10 px-4 pt-8 pb-14 sm:px-8 sm:pt-14 sm:pb-20 lg:grid-cols-12 lg:gap-12">
+      <div className="aksan-container relative z-10 grid grid-cols-1 items-center gap-8 pt-20 pb-10 sm:gap-10 sm:pt-24 sm:pb-14 lg:min-h-[min(calc(100svh-40px),920px)] lg:grid-cols-12 lg:gap-10 lg:py-20 xl:gap-14">
         {/* Left Editorial Column */}
         <div className="lg:col-span-7">
-          <div className="flex flex-wrap items-center gap-2.5">
-            <span className="hero-eyebrow font-mono-index text-xs tracking-[0.16em] text-[#59606E] uppercase">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+            <span className="hero-eyebrow font-mono-index text-[10.5px] tracking-[0.15em] text-[#59606E] uppercase sm:text-xs">
               HYBRID R&amp;D &amp; VENTURE STUDIO · GLOBAL REMOTE
             </span>
-            <span className="font-mono-index rotate-[-2deg] rounded-full bg-[#161920] px-3 py-1 text-[10.5px] font-medium tracking-[0.1em] text-[#F4F1EA] uppercase">
+            <span className="font-mono-index rotate-[-2deg] rounded-full bg-[#161920] px-2.5 py-0.5 text-[10px] font-medium tracking-[0.1em] text-[#F4F1EA] uppercase sm:px-3 sm:py-1 sm:text-[10.5px]">
               No Rigid Niches
             </span>
-            <span className="font-mono-index rotate-[1.5deg] rounded-full bg-[#E85427] px-3 py-1 text-[10.5px] font-medium tracking-[0.1em] text-[#FAF8F3] uppercase">
+            <span className="font-mono-index rotate-[1.5deg] rounded-full bg-[#E85427] px-2.5 py-0.5 text-[10px] font-medium tracking-[0.1em] text-[#FAF8F3] uppercase sm:px-3 sm:py-1 sm:text-[10.5px]">
               Dual-Track Studio
             </span>
           </div>
 
           <h1
             aria-label="Calm systems built for operational peace and freedom to grow."
-            className="mt-5 font-semibold tracking-[-0.03em] text-[#161920]"
+            className="mt-4 font-semibold tracking-[-0.03em] text-[#161920] sm:mt-5"
             style={{
-              fontSize: 'clamp(38px, 5.4vw, 72px)',
-              lineHeight: 1.02,
+              fontSize: 'clamp(34px, 4.7vw, 78px)',
+              lineHeight: 1.01,
             }}
           >
             <span className="block overflow-hidden pb-1">
@@ -212,10 +212,10 @@ export function HeroStage({ onNavigate, onOpenDialogue }: HeroStageProps) {
 
         {/* Right Asymmetric Two26-Style Visual Specimen Stack */}
         <div className="hero-visual-stack relative min-w-0 lg:col-span-5">
-          <div className="relative mx-auto max-w-[440px] lg:max-w-none">
+          <div className="relative mx-auto w-full max-w-[440px] lg:ml-auto lg:mr-0 lg:max-w-[430px] xl:max-w-[480px] 2xl:max-w-[540px]">
             {/* Primary Ambient Video + Atmospheric Concrete Frame */}
-            <div className="overflow-hidden rounded-2xl border-2 border-[#161920] bg-[var(--surface-elevated)] shadow-[8px_8px_0px_rgba(232,84,39,0.22)]">
-              <div className="relative aspect-[4/4.6] overflow-hidden bg-[#111218]">
+            <div className="w-full overflow-hidden rounded-2xl border-2 border-[#161920] bg-[var(--surface-elevated)] shadow-[8px_8px_0px_rgba(232,84,39,0.22)]">
+              <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#111218] sm:aspect-[4/3.6] xl:aspect-[4/3.8]">
                 <video
                   autoPlay={!prefersReducedMotion()}
                   muted
@@ -228,16 +228,19 @@ export function HeroStage({ onNavigate, onOpenDialogue }: HeroStageProps) {
                 >
                   <source src={HERO_MEDIA.mainVideo} type="video/mp4" />
                 </video>
-                <span className="font-mono-index absolute top-3.5 left-3.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-[#111218]/75 px-3 py-1 text-[10px] font-medium tracking-[0.12em] text-[#FAF8F3] backdrop-blur-sm uppercase">
+                <span className="font-mono-index absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-[#111218]/75 px-3 py-1 text-[10px] font-medium tracking-[0.12em] text-[#FAF8F3] backdrop-blur-sm uppercase">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#E85427]" />
                   Motion Study 01
                 </span>
               </div>
               <div className="flex items-center justify-between border-t border-[var(--hairline)] px-4 py-2.5 sm:justify-end sm:gap-3">
+                <span className="font-mono-index text-[10px] tracking-[0.1em] text-[#59606E] uppercase sm:hidden">
+                  CALM PACE · WORKBENCH
+                </span>
                 <span className="font-mono-index text-[10.5px] tracking-[0.12em] text-[#59606E] uppercase">
                   STRUCTURE &amp; LIGHT
                 </span>
-                <span className="h-2 w-2 shrink-0 rounded-full bg-[#E85427]" />
+                <span className="hidden h-2 w-2 shrink-0 rounded-full bg-[#E85427] sm:inline-block" />
               </div>
             </div>
 

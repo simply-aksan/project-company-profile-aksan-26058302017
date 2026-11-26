@@ -150,7 +150,7 @@ export function DialogueModal({
           <div className="font-mono-index text-[11px] tracking-[0.12em] text-[#59606E] uppercase">
             01. Choose Track
           </div>
-          <div className="mt-2 grid grid-cols-2 gap-2">
+          <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
             {(['Client Engineering', 'R&D Ventures'] as DialogueTrack[]).map((item) => {
               const active = track === item;
               return (

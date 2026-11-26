@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Minus, Plus } from 'lucide-react';
 import {
   CONTACT_CONFIG,
@@ -6,6 +6,7 @@ import {
   PortalSectionId,
   STACK_PRINCIPLES,
 } from '../data/aksanContent';
+import { gsap, prefersReducedMotion, useGSAP } from '../lib/gsap';
 import { SakugaBtn } from './SakugaControl';
 
 interface PhilosophyBandProps {
@@ -19,6 +20,33 @@ export function PhilosophyBand({
 }: PhilosophyBandProps) {
   const [activeCardIdx, setActiveCardIdx] = useState(0);
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
+      const wordmark = rootRef.current?.querySelector('.aksan-footer-wordmark');
+      const footer = rootRef.current?.querySelector('#studio-footer');
+      if (!wordmark || !footer) return;
+
+      gsap.fromTo(
+        wordmark,
+        { scaleY: 0.16 },
+        {
+          scaleY: 1,
+          ease: 'none',
+          transformOrigin: 'bottom center',
+          scrollTrigger: {
+            trigger: footer,
+            start: 'top 85%',
+            end: 'bottom bottom',
+            scrub: 0.45,
+          },
+        }
+      );
+    },
+    { scope: rootRef }
+  );
 
   const handleNextCard = () => {
     setActiveCardIdx((prev) => (prev + 1) % STACK_PRINCIPLES.length);
@@ -31,9 +59,10 @@ export function PhilosophyBand({
   };
 
   return (
-    <div className="relative">
+    <div ref={rootRef} className="relative">
       {/* BAND A: Solid Terracotta Interactive Principle Card Stack */}
       <section
+        id="stack-convictions"
         aria-label="Operating philosophy deck"
         className="relative overflow-hidden bg-[#E85427] py-20 text-[#FAF8F3] sm:py-28"
       >
@@ -52,7 +81,7 @@ export function PhilosophyBand({
           />
         </svg>
 
-        <div className="relative z-10 mx-auto grid max-w-[1220px] grid-cols-1 items-center gap-12 px-4 sm:px-8 lg:grid-cols-12">
+        <div className="aksan-container relative z-10 grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
           {/* Left Manifesto Headline */}
           <div className="lg:col-span-5">
             <span className="font-mono-index inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3.5 py-1 text-[11px] font-medium tracking-[0.16em] text-white uppercase">
@@ -61,7 +90,7 @@ export function PhilosophyBand({
 
             <h2
               className="mt-5 font-display font-bold tracking-[-0.03em] text-white"
-              style={{ fontSize: 'clamp(34px, 4.4vw, 56px)', lineHeight: 1.03 }}
+              style={{ fontSize: 'clamp(32px, 4.2vw, 60px)', lineHeight: 1.03 }}
             >
               Freedom of direction requires{' '}
               <span className="font-serif-editorial font-normal italic text-[#FFF3D6]">
@@ -98,19 +127,19 @@ export function PhilosophyBand({
             </div>
           </div>
 
-          {/* Right Interactive Stacked White Tilted Cards */}
+          {/* Right Auto-Sizing Grid Stacked Cards (Zero clipping at any width) */}
           <div className="flex items-center gap-4 sm:gap-6 lg:col-span-7 lg:justify-end">
-            <div className="relative h-[320px] w-full max-w-[540px] sm:h-[300px]">
+            <div className="grid w-full max-w-[560px] pr-3 sm:pr-5">
               {STACK_PRINCIPLES.map((item, idx) => {
                 const offset =
                   (idx - activeCardIdx + STACK_PRINCIPLES.length) %
                   STACK_PRINCIPLES.length;
                 const isFront = offset === 0;
-                const rotations = [0, -3.2, 2.4, -4.5];
+                const rotations = [0, -2.8, 2.2, -3.8];
                 const rot = rotations[offset] ?? 0;
-                const translateY = offset * 10;
-                const translateX = offset * 8;
-                const scale = 1 - offset * 0.035;
+                const translateY = offset * 8;
+                const translateX = offset * 4;
+                const scale = 1 - offset * 0.032;
                 const zIndex = STACK_PRINCIPLES.length - offset;
 
                 return (
@@ -123,33 +152,33 @@ export function PhilosophyBand({
                       transform: `translate(${translateX}px, ${translateY}px) rotate(${rot}deg) scale(${scale})`,
                       zIndex,
                     }}
-                    className={`absolute inset-0 flex flex-col justify-between rounded-[24px] border-2 border-[#161920] bg-[#FAF8F3] p-6 text-left text-[#161920] shadow-[8px_8px_0px_rgba(22,25,32,0.28)] transition-[transform,opacity] duration-500 sm:p-8 ${
+                    className={`col-start-1 row-start-1 flex min-h-[260px] w-full flex-col justify-between rounded-[22px] border-2 border-[#161920] bg-[#FAF8F3] p-5 text-left text-[#161920] shadow-[8px_8px_0px_rgba(22,25,32,0.28)] transition-[transform,opacity] duration-500 sm:min-h-[290px] sm:rounded-[24px] sm:p-8 ${
                       isFront ? 'cursor-pointer opacity-100' : 'opacity-90'
                     }`}
                   >
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="font-mono-index text-xs font-semibold tracking-[0.16em] text-[#E85427] uppercase">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="font-mono-index text-[10.5px] font-semibold tracking-[0.15em] text-[#E85427] uppercase sm:text-xs">
                         {item.code} // PRINCIPLE
                       </span>
-                      <span className="font-mono-index rounded-full border border-[#161920]/20 bg-[#F7ECE6] px-3 py-1 text-[10px] font-semibold tracking-[0.1em] text-[#161920] uppercase">
+                      <span className="font-mono-index rounded-full border border-[#161920]/20 bg-[#F7ECE6] px-2.5 py-0.5 text-[10px] font-semibold tracking-[0.08em] text-[#161920] uppercase sm:px-3 sm:py-1">
                         {item.tag}
                       </span>
                     </div>
 
-                    <div className="my-auto py-3">
-                      <h3 className="font-display text-xl font-bold tracking-[-0.02em] text-[#161920] sm:text-2xl">
+                    <div className="my-auto py-4">
+                      <h3 className="font-display text-lg font-bold tracking-[-0.02em] text-[#161920] sm:text-2xl">
                         {item.title}
                       </h3>
-                      <p className="mt-3 text-sm leading-relaxed text-[#4A515D] sm:text-base">
+                      <p className="mt-2.5 text-sm leading-relaxed text-[#4A515D] sm:mt-3 sm:text-base">
                         &ldquo;{item.quote}&rdquo;
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between border-t border-[var(--hairline)] pt-3.5 text-xs">
-                      <span className="font-mono-index font-semibold tracking-[0.08em] text-[#161920] uppercase">
+                    <div className="flex items-center justify-between gap-2 border-t border-[var(--hairline)] pt-3.5 text-[11px] sm:text-xs">
+                      <span className="font-mono-index font-semibold tracking-[0.06em] text-[#161920] uppercase">
                         {item.role}
                       </span>
-                      <span className="font-mono-index text-[#B8431B] uppercase">
+                      <span className="font-mono-index shrink-0 text-[#B8431B] uppercase">
                         Tap Card -&gt;
                       </span>
                     </div>
@@ -187,17 +216,17 @@ export function PhilosophyBand({
       {/* BAND B: Interactive FAQ Section */}
       <section
         id="faq"
-        className="scroll-mt-24 bg-[#F7ECE6] py-20 text-[#161920] sm:py-28"
+        className="scroll-mt-4 bg-[#F7ECE6] py-20 text-[#161920] sm:py-24 sm:pb-28"
       >
-        <div className="mx-auto grid max-w-[1220px] grid-cols-1 gap-12 px-4 sm:px-8 lg:grid-cols-12">
-          {/* Left Sticky Title & Geometric Studio Badge */}
+        <div className="aksan-container grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
+          {/* Left Title & Geometric Studio Badge */}
           <div className="lg:col-span-5">
             <span className="font-mono-index text-xs tracking-[0.16em] text-[#B8431B] uppercase">
               05 // STRAIGHT ANSWERS
             </span>
             <h2
               className="mt-4 font-display font-bold tracking-[-0.03em] text-[#161920] uppercase"
-              style={{ fontSize: 'clamp(34px, 4.2vw, 52px)', lineHeight: 0.98 }}
+              style={{ fontSize: 'clamp(32px, 4.1vw, 56px)', lineHeight: 0.98 }}
             >
               Things you
               <br />
@@ -205,17 +234,24 @@ export function PhilosophyBand({
             </h2>
 
             <div className="mt-6 flex items-center gap-4">
-              {/* Crisp Optical Geometry Studio Emblem (Zero emojis) */}
+              {/* Crisp Optical Geometry Studio Emblem */}
               <svg
-                width="68"
-                height="68"
+                width="64"
+                height="64"
                 viewBox="0 0 68 68"
                 fill="none"
                 aria-hidden="true"
                 className="shrink-0"
               >
                 <circle cx="34" cy="34" r="31" stroke="#161920" strokeWidth="2" />
-                <circle cx="34" cy="34" r="18" stroke="#E85427" strokeWidth="2" strokeDasharray="5 4" />
+                <circle
+                  cx="34"
+                  cy="34"
+                  r="18"
+                  stroke="#E85427"
+                  strokeWidth="2"
+                  strokeDasharray="5 4"
+                />
                 <rect
                   x="27"
                   y="27"
@@ -245,7 +281,7 @@ export function PhilosophyBand({
                     type="button"
                     aria-expanded={isOpen}
                     onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
-                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left sm:px-6 sm:py-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E85427]"
+                    className="flex w-full items-center justify-between gap-4 px-4.5 py-4 text-left sm:px-6 sm:py-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E85427]"
                   >
                     <span className="font-display text-base font-bold tracking-tight text-[#161920] sm:text-lg">
                       {item.q}
@@ -256,7 +292,7 @@ export function PhilosophyBand({
                   </button>
 
                   {isOpen && (
-                    <div className="border-t border-[var(--hairline)] px-5 pt-3 pb-5 text-sm leading-relaxed text-[#4A515D] sm:px-6 sm:text-base">
+                    <div className="border-t border-[var(--hairline)] px-4.5 pt-3 pb-5 text-sm leading-relaxed text-[#4A515D] sm:px-6 sm:text-base">
                       {item.a}
                     </div>
                   )}
@@ -268,7 +304,10 @@ export function PhilosophyBand({
       </section>
 
       {/* BAND C: Monumental Full-Bleed Terracotta Closing Footer */}
-      <footer className="relative overflow-hidden bg-[#E85427] pt-20 text-white sm:pt-24">
+      <footer
+        id="studio-footer"
+        className="relative flex min-h-[100dvh] flex-col justify-between overflow-hidden bg-[#E85427] pt-20 text-white sm:pt-28"
+      >
         {/* Soft Translucent Curve Lines */}
         <svg
           aria-hidden="true"
@@ -285,15 +324,15 @@ export function PhilosophyBand({
           <circle cx="1180" cy="110" r="140" stroke="#FFFFFF" strokeWidth="1.5" />
         </svg>
 
-        <div className="relative z-10 mx-auto max-w-[1220px] px-4 sm:px-8">
-          <div className="flex flex-col justify-between gap-8 border-b border-white/25 pb-14 lg:flex-row lg:items-end">
-            <div className="max-w-[660px]">
-              <span className="font-mono-index text-xs tracking-[0.18em] text-[#FFF3D6] uppercase">
+        <div className="aksan-container relative z-10 my-auto py-4 sm:py-8">
+          <div className="flex flex-col justify-between gap-5 border-b border-white/25 pb-7 sm:gap-8 sm:pb-12 lg:flex-row lg:items-end">
+            <div className="max-w-[680px]">
+              <span className="font-mono-index text-[10.5px] tracking-[0.18em] text-[#FFF3D6] uppercase sm:text-xs">
                 06 // CLOSING DIALOGUE
               </span>
               <h2
-                className="mt-3 font-display font-bold tracking-[-0.03em] text-white"
-                style={{ fontSize: 'clamp(34px, 4.8vw, 62px)', lineHeight: 1.02 }}
+                className="mt-2 font-display font-bold tracking-[-0.03em] text-white sm:mt-3"
+                style={{ fontSize: 'clamp(28px, 4.4vw, 66px)', lineHeight: 1.03 }}
               >
                 Okay, that&apos;s enough scrolling.{' '}
                 <span className="font-serif-editorial font-normal italic text-[#FFF3D6]">
@@ -302,7 +341,7 @@ export function PhilosophyBand({
               </h2>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <SakugaBtn
                 variant="secondary"
                 onClick={(done) => {
@@ -316,7 +355,7 @@ export function PhilosophyBand({
 
               <a
                 href={`mailto:${CONTACT_CONFIG.email}`}
-                className="flex min-h-[48px] items-center justify-center rounded-full border-2 border-[#161920] bg-white px-6 text-xs font-semibold tracking-[0.06em] text-[#161920] shadow-[4px_4px_0px_#161920] transition-transform hover:-translate-y-0.5"
+                className="flex min-h-[44px] items-center justify-center rounded-full border-2 border-[#161920] bg-white px-5 text-xs font-semibold tracking-[0.04em] break-all text-[#161920] shadow-[4px_4px_0px_#161920] transition-transform hover:-translate-y-0.5 sm:min-h-[48px] sm:px-6 sm:tracking-[0.06em]"
               >
                 {CONTACT_CONFIG.email}
               </a>
@@ -324,7 +363,7 @@ export function PhilosophyBand({
           </div>
 
           {/* Grounded 3-Column Studio Meta Links */}
-          <div className="grid grid-cols-1 gap-8 py-12 text-sm sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 py-6 text-sm sm:grid-cols-3 sm:gap-8 sm:py-10">
             <div>
               <p className="font-mono-index text-[11px] font-semibold tracking-[0.16em] text-white/75 uppercase">
                 STUDIO IDENTITY
@@ -397,14 +436,29 @@ export function PhilosophyBand({
           </div>
         </div>
 
-        {/* Full-Width Giant Display Wordmark Anchoring Bottom Edge */}
+        {/* Edge-to-Edge Vector Proportional SVG Wordmark with Two26-Style Unfold */}
         <div
           aria-hidden="true"
-          className="relative z-10 w-full overflow-hidden border-t border-white/15 pt-4 select-none"
+          className="relative z-10 w-full overflow-hidden border-t border-white/15 pt-2 pb-2 select-none sm:pt-4 sm:pb-3"
         >
-          <div className="mx-auto text-center font-display text-[17vw] leading-[0.82] font-extrabold tracking-[-0.04em] text-[#FAF8F3] uppercase">
-            AKSAN LAB
-          </div>
+          <svg
+            viewBox="0 0 1120 175"
+            className="aksan-footer-wordmark block h-auto w-full origin-bottom will-change-transform"
+            preserveAspectRatio="xMidYMid meet"
+          >
+            <text
+              x="560"
+              y="148"
+              textAnchor="middle"
+              fill="#FAF8F3"
+              fontFamily="'Space Grotesk', 'Albert Sans', sans-serif"
+              fontWeight="700"
+              fontSize="188"
+              letterSpacing="-6"
+            >
+              AKSAN LAB
+            </text>
+          </svg>
         </div>
       </footer>
     </div>

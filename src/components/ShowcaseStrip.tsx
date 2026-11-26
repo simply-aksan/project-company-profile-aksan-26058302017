@@ -30,7 +30,7 @@ export function ShowcaseStrip({ onSelectSpecimen }: ShowcaseStripProps) {
       className="relative overflow-hidden bg-[#F7ECE6] pt-6 pb-20 lg:pt-10 lg:pb-24"
     >
       {/* Editorial micro-header above the flowing specimen stream */}
-      <div className="mx-auto mb-8 flex max-w-[1440px] flex-wrap items-end justify-between gap-4 px-5 sm:px-8 lg:px-12">
+      <div className="aksan-container mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="font-mono text-[11px] font-semibold tracking-[0.22em] text-[#B8431B] uppercase">
             01 — Living Studio Wall
@@ -67,7 +67,7 @@ export function ShowcaseStrip({ onSelectSpecimen }: ShowcaseStripProps) {
                 tabIndex={isClone ? -1 : 0}
                 aria-hidden={isClone}
                 onClick={() => onSelectSpecimen?.(item)}
-                className="group relative flex w-[280px] shrink-0 flex-col overflow-hidden rounded-[24px] p-3 text-left transition-transform duration-300 hover:-translate-y-1.5 sm:w-[360px] sm:p-3.5 lg:w-[430px]"
+                className="group relative flex w-[264px] shrink-0 flex-col overflow-hidden rounded-[24px] p-3 text-left transition-transform duration-300 hover:-translate-y-1.5 sm:w-[340px] sm:p-3.5 lg:w-[410px] 2xl:w-[460px]"
                 style={{ backgroundColor: item.toneBg }}
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[18px] bg-[#111218]">

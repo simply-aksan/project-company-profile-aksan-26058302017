@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --font-display: "Space Grotesk", "Albert Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
 :root {
   --surface-paper: #f4f1ea;
   --surface-blush: #f6ece6;
@@ -181,6 +185,32 @@ sakuga-input::part(input) {
   font-size: 16px;
   padding: 11px 14px;
   border-radius: 10px;
+}
+
+.aksan-container {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .aksan-container {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .aksan-container {
+    padding-inline: 3rem;
+  }
+}
+
+@media (min-width: 1680px) {
+  .aksan-container {
+    max-width: 1600px;
+    padding-inline: 3.5rem;
+  }
 }
 
 .transition-expo {

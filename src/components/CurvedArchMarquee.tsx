@@ -61,7 +61,7 @@ export function CurvedArchMarquee() {
       <svg
         viewBox="0 0 1440 185"
         preserveAspectRatio="xMidYMid slice"
-        className="block h-[112px] w-full sm:h-[146px] lg:h-[185px]"
+        className="block h-[clamp(104px,12.8vw,250px)] w-full"
         role="img"
         aria-label={CLEAN_PHRASE}
       >

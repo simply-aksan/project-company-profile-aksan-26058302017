@@ -79,12 +79,12 @@ export function ClientEngineeringSection({
     <section
       id="client-engineering"
       ref={sectionRef}
-      className="relative scroll-mt-24 overflow-hidden border-b border-[var(--hairline)] bg-[#F7ECE6] py-20 sm:py-28"
+      className="relative scroll-mt-4 overflow-hidden border-b border-[var(--hairline)] bg-[#F7ECE6] pt-20 pb-20 sm:pt-24 sm:pb-28"
     >
-      <div className="relative z-10 mx-auto max-w-[1220px] px-4 sm:px-8">
+      <div className="aksan-container relative z-10">
         {/* Section Editorial Header */}
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-          <div className="max-w-[660px]">
+          <div className="max-w-[700px]">
             <div className="flex flex-wrap items-center gap-3">
               <span className="font-mono-index text-xs tracking-[0.16em] text-[#B8431B] uppercase">
                 02 // CLIENT ENGINEERING
@@ -97,7 +97,7 @@ export function ClientEngineeringSection({
 
             <h2
               className="mt-4 font-semibold tracking-[-0.03em] text-[#161920]"
-              style={{ fontSize: 'clamp(32px, 4.2vw, 54px)', lineHeight: 1.06 }}
+              style={{ fontSize: 'clamp(30px, 3.9vw, 60px)', lineHeight: 1.05 }}
             >
               Structured engineering designed to remove technical chaos.
             </h2>
@@ -139,95 +139,106 @@ export function ClientEngineeringSection({
           </div>
 
           {/* 4 Staggered Alternating Capability Chapters */}
-          <div className="relative z-10 space-y-12 lg:space-y-24">
+          <div className="relative z-10 space-y-8 md:space-y-12 lg:space-y-24">
             {CLIENT_CAPABILITIES.map((cap, idx) => {
               const Icon = CAP_ICONS[idx % CAP_ICONS.length];
               const isReversed = idx % 2 === 1;
               return (
-                <article
-                  key={cap.code}
-                  className={`cap-chapter relative flex flex-col gap-6 rounded-[28px] border-2 border-[#161920] bg-[#FAF8F3] p-5 shadow-[6px_6px_0px_rgba(22,25,32,0.12)] sm:p-7 lg:flex-row lg:items-center lg:gap-10 lg:p-8 lg:pb-10 ${
-                    isReversed ? 'lg:ml-auto lg:w-[82%] lg:flex-row-reverse' : 'lg:mr-auto lg:w-[82%]'
-                  }`}
-                >
-                  {/* Visual Frame (Video or Curated Photography) */}
-                  <div className="relative w-full shrink-0 sm:pb-4 lg:w-[46%]">
-                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-[#161920]/15 bg-[#111218]">
-                      {cap.mediaType === 'video' ? (
-                        <video
-                          autoPlay={!prefersReducedMotion()}
-                          muted
-                          loop
-                          playsInline
-                          preload="metadata"
-                          poster={cap.posterSrc}
-                          aria-label={cap.mediaAlt}
-                          className="h-full w-full object-cover"
-                        >
-                          <source src={cap.mediaSrc} type="video/mp4" />
-                        </video>
-                      ) : (
-                        <img
-                          src={cap.mediaSrc}
-                          alt={cap.mediaAlt}
-                          loading="lazy"
-                          className="h-full w-full object-cover"
-                        />
-                      )}
-
-                      <span className="font-mono-index absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-[#161920] bg-[#FAF8F3]/95 px-3 py-1 text-[10px] font-semibold tracking-[0.12em] text-[#161920] uppercase">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#E85427]" />
-                        {cap.code}
-                      </span>
-                    </div>
-
-                    {/* Floating Rotated Editorial Capsule neatly inset */}
-                    <span
-                      className={`font-mono-index mt-3 inline-block rounded-full border-2 border-[#161920] bg-[#E85427] px-3.5 py-1 text-[10px] font-semibold tracking-[0.07em] text-[#FAF8F3] shadow-[3px_3px_0px_#161920] uppercase sm:absolute sm:bottom-0 ${
-                        isReversed ? 'sm:left-2 sm:rotate-[-2deg]' : 'sm:right-2 sm:rotate-[2deg]'
-                      }`}
-                    >
-                      {cap.capsuleNote}
-                    </span>
-                  </div>
-
-                  {/* Narrative + Split Graphic Icon Headline + Deliverables */}
-                  <div className="min-w-0 flex-1 pt-1 sm:pt-0">
-                    <div className="flex flex-wrap items-center gap-2.5">
-                      <span className="font-display text-2xl font-bold tracking-[-0.03em] text-[#161920] sm:text-3xl">
-                        {cap.titleLeft}
-                      </span>
-                      <span
-                        aria-hidden="true"
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-xl border-2 border-[#161920] bg-[#F7ECE6] text-[#E85427]"
-                      >
-                        <Icon className="h-4 w-4 stroke-[2.2]" />
-                      </span>
-                      <span className="font-display text-2xl font-bold tracking-[-0.03em] text-[#E85427] sm:text-3xl">
-                        {cap.titleRight}
-                      </span>
-                    </div>
-
-                    <p className="mt-3.5 max-w-[54ch] text-sm leading-relaxed text-[#4A515D] sm:text-base">
-                      {cap.summary}
-                    </p>
-
-                    <ul className="mt-5 grid grid-cols-1 gap-2.5 border-t border-[var(--hairline)] pt-4 sm:grid-cols-2">
-                      {cap.deliverables.map((item) => (
-                        <li
-                          key={item}
-                          className="flex items-start gap-2.5 text-sm text-[#161920]"
-                        >
-                          <span
-                            aria-hidden="true"
-                            className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#E85427]"
+                <div key={cap.code}>
+                  <article
+                    className={`cap-chapter relative flex flex-col gap-5 rounded-[24px] border-2 border-[#161920] bg-[#FAF8F3] p-4.5 shadow-[6px_6px_0px_rgba(22,25,32,0.12)] sm:gap-6 sm:rounded-[28px] sm:p-7 lg:flex-row lg:items-center lg:gap-10 lg:p-8 lg:pb-10 ${
+                      isReversed
+                        ? 'md:ml-auto md:w-[92%] lg:w-[82%] lg:flex-row-reverse'
+                        : 'md:mr-auto md:w-[92%] lg:w-[82%]'
+                    }`}
+                  >
+                    {/* Visual Frame (Video or Curated Photography) */}
+                    <div className="relative w-full shrink-0 sm:pb-4 lg:w-[46%]">
+                      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-[#161920]/15 bg-[#111218]">
+                        {cap.mediaType === 'video' ? (
+                          <video
+                            autoPlay={!prefersReducedMotion()}
+                            muted
+                            loop
+                            playsInline
+                            preload="metadata"
+                            poster={cap.posterSrc}
+                            aria-label={cap.mediaAlt}
+                            className="h-full w-full object-cover"
+                          >
+                            <source src={cap.mediaSrc} type="video/mp4" />
+                          </video>
+                        ) : (
+                          <img
+                            src={cap.mediaSrc}
+                            alt={cap.mediaAlt}
+                            loading="lazy"
+                            className="h-full w-full object-cover"
                           />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </article>
+                        )}
+
+                        <span className="font-mono-index absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-[#161920] bg-[#FAF8F3]/95 px-3 py-1 text-[10px] font-semibold tracking-[0.12em] text-[#161920] uppercase">
+                          <span className="h-1.5 w-1.5 rounded-full bg-[#E85427]" />
+                          {cap.code}
+                        </span>
+                      </div>
+
+                      {/* Floating Rotated Editorial Capsule neatly inset */}
+                      <span
+                        className={`font-mono-index mt-3 inline-block max-w-full rounded-2xl border-2 border-[#161920] bg-[#E85427] px-3.5 py-1.5 text-[10px] leading-snug font-semibold tracking-[0.06em] text-[#FAF8F3] shadow-[3px_3px_0px_#161920] uppercase sm:rounded-full sm:py-1 sm:absolute sm:bottom-0 ${
+                          isReversed ? 'sm:left-2 sm:rotate-[-2deg]' : 'sm:right-2 sm:rotate-[2deg]'
+                        }`}
+                      >
+                        {cap.capsuleNote}
+                      </span>
+                    </div>
+
+                    {/* Narrative + Split Graphic Icon Headline + Deliverables */}
+                    <div className="min-w-0 flex-1 pt-1 sm:pt-0">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+                        <span className="font-display text-xl font-bold tracking-[-0.03em] text-[#161920] sm:text-3xl">
+                          {cap.titleLeft}
+                        </span>
+                        <span
+                          aria-hidden="true"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-xl border-2 border-[#161920] bg-[#F7ECE6] text-[#E85427] sm:h-9 sm:w-9"
+                        >
+                          <Icon className="h-4 w-4 stroke-[2.2]" />
+                        </span>
+                        <span className="font-display text-xl font-bold tracking-[-0.03em] text-[#E85427] sm:text-3xl">
+                          {cap.titleRight}
+                        </span>
+                      </div>
+
+                      <p className="mt-3 max-w-[54ch] text-sm leading-relaxed text-[#4A515D] sm:mt-3.5 sm:text-base">
+                        {cap.summary}
+                      </p>
+
+                      <ul className="mt-4 grid grid-cols-1 gap-2 border-t border-[var(--hairline)] pt-4 sm:mt-5 sm:grid-cols-2 sm:gap-2.5">
+                        {cap.deliverables.map((item) => (
+                          <li
+                            key={item}
+                            className="flex items-start gap-2.5 text-sm text-[#161920]"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#E85427]"
+                            />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </article>
+
+                  {/* Subtle flow spine bridge for stacked mobile/tablet screens */}
+                  {idx < CLIENT_CAPABILITIES.length - 1 && (
+                    <div
+                      aria-hidden="true"
+                      className="mx-auto mt-6 h-7 w-0 border-l-2 border-dashed border-[#E85427]/45 lg:hidden"
+                    />
+                  )}
+                </div>
               );
             })}
           </div>

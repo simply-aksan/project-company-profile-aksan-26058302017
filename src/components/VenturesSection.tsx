@@ -51,7 +51,7 @@ export function VenturesSection({ onCollaborateTrack }: VenturesSectionProps) {
   return (
     <section
       id="rd-ventures"
-      className="aksan-obsidian-lab relative scroll-mt-20 overflow-hidden border-b border-white/10 bg-[#111218] py-20 text-[#F4F1EA] sm:py-28"
+      className="aksan-obsidian-lab relative scroll-mt-4 overflow-hidden border-b border-white/10 bg-[#111218] pt-20 pb-20 text-[#F4F1EA] sm:pt-24 sm:pb-28"
     >
       {/* Cyera-Inspired Atmospheric Nocturnal Glow Scaled by Sakuga Controls */}
       <div
@@ -64,7 +64,7 @@ export function VenturesSection({ onCollaborateTrack }: VenturesSectionProps) {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-[1220px] px-4 sm:px-8">
+      <div className="aksan-container relative z-10">
         {/* Top Lab Header */}
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div className="max-w-[640px]">
@@ -151,8 +151,8 @@ export function VenturesSection({ onCollaborateTrack }: VenturesSectionProps) {
                 </span>
               </div>
 
-              <div className="mt-4 flex items-center justify-between gap-4">
-                <div className="min-w-0">
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                <div className="min-w-0 flex-1">
                   <div className="text-sm font-medium text-[#FAF8F3]">Field Surge Mode</div>
                   <p className="text-xs text-[#9CA3B2]">
                     43-frame splash switch driving atmospheric bloom.
@@ -183,13 +183,11 @@ export function VenturesSection({ onCollaborateTrack }: VenturesSectionProps) {
               </div>
 
               <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-5">
-                <span className="text-xs text-[#9CA3B2]">Test anime frame impact reaction</span>
+                <span className="text-xs text-[#9CA3B2]">Test kinetic impact</span>
                 <SakugaBtn
                   onClick={(done) => {
                     done();
-                    labToastRef.current?.show(
-                      `${activeTrack.code} pulse calibrated at ${momentum}%`
-                    );
+                    labToastRef.current?.show(`${activeTrack.code} · ${momentum}% calibrated`);
                   }}
                   ariaLabel="Trigger lab pulse"
                 >
@@ -346,7 +344,13 @@ export function VenturesSection({ onCollaborateTrack }: VenturesSectionProps) {
       <sakuga-toast
         ref={labToastRef}
         duration="2.6"
-        style={{ position: 'fixed', bottom: '24px', left: '24px', zIndex: 60 }}
+        style={{
+          position: 'fixed',
+          bottom: '16px',
+          left: '16px',
+          maxWidth: 'calc(100vw - 32px)',
+          zIndex: 60,
+        }}
       />
     </section>
   );

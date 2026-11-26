@@ -1,9 +1,9 @@
 import Lenis from 'lenis';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ClientEngineeringSection } from './components/ClientEngineeringSection';
 import { CurvedArchMarquee } from './components/CurvedArchMarquee';
 import { DialogueModal } from './components/DialogueModal';
-import { HeaderPortal } from './components/HeaderPortal';
+import { HeaderBackdropTone, HeaderPortal } from './components/HeaderPortal';
 import { HeroStage } from './components/HeroStage';
 import { PhilosophyBand } from './components/PhilosophyBand';
 import { ShowcaseStrip } from './components/ShowcaseStrip';
@@ -12,9 +12,27 @@ import { DialogueTrack, PortalSectionId } from './data/aksanContent';
 import { gsap, prefersReducedMotion, ScrollTrigger } from './lib/gsap';
 import { applyAksanSakugaTheme } from './lib/sakugaTheme';
 
+const PORTAL_IDS: PortalSectionId[] = [
+  'overview',
+  'studio-showcase',
+  'client-engineering',
+  'rd-ventures',
+  'faq',
+];
+
+const BAND_TONES: { id: string; tone: HeaderBackdropTone }[] = [
+  { id: 'overview', tone: 'light' },
+  { id: 'studio-showcase', tone: 'light' },
+  { id: 'client-engineering', tone: 'light' },
+  { id: 'rd-ventures', tone: 'dark' },
+  { id: 'stack-convictions', tone: 'terracotta' },
+  { id: 'faq', tone: 'light' },
+  { id: 'studio-footer', tone: 'terracotta' },
+];
+
 export default function App() {
   const [activeSection, setActiveSection] = useState<PortalSectionId>('overview');
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [headerTone, setHeaderTone] = useState<HeaderBackdropTone>('light');
   const [dialogueOpen, setDialogueOpen] = useState(false);
   const [dialogueTrack, setDialogueTrack] = useState<DialogueTrack>('Client Engineering');
   const [dialogueScope, setDialogueScope] = useState<string | undefined>(undefined);
@@ -22,19 +40,45 @@ export default function App() {
 
   const lenisRef = useRef<Lenis | null>(null);
 
+  const syncScrollIndicators = useCallback(() => {
+    // Active nav check at upper-third viewport focal line
+    const navFocalY = Math.min(260, window.innerHeight * 0.28);
+    let nextActive: PortalSectionId = 'overview';
+    for (const id of PORTAL_IDS) {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top <= navFocalY) {
+        nextActive = id;
+      }
+    }
+    setActiveSection((prev) => (prev === nextActive ? prev : nextActive));
+
+    // Contrast check strictly behind the floating center header at y = 30px
+    const headerSampleY = 30;
+    let nextTone: HeaderBackdropTone = 'light';
+    for (const band of BAND_TONES) {
+      const el = document.getElementById(band.id);
+      if (!el) continue;
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= headerSampleY && rect.bottom > headerSampleY) {
+        nextTone = band.tone;
+        break;
+      }
+    }
+    setHeaderTone((prev) => (prev === nextTone ? prev : nextTone));
+  }, []);
+
   useEffect(() => {
     applyAksanSakugaTheme();
+    syncScrollIndicators();
 
-    const updateScrollGauge = () => {
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      if (maxScroll > 0) {
-        setScrollProgress(Math.max(0, Math.min(1, window.scrollY / maxScroll)));
-      }
-    };
+    window.addEventListener('scroll', syncScrollIndicators, { passive: true });
+    window.addEventListener('resize', syncScrollIndicators, { passive: true });
 
     if (prefersReducedMotion()) {
-      window.addEventListener('scroll', updateScrollGauge, { passive: true });
-      return () => window.removeEventListener('scroll', updateScrollGauge);
+      return () => {
+        window.removeEventListener('scroll', syncScrollIndicators);
+        window.removeEventListener('resize', syncScrollIndicators);
+      };
     }
 
     const lenis = new Lenis({
@@ -44,8 +88,8 @@ export default function App() {
     });
     lenisRef.current = lenis;
 
-    const onLenisScroll = ({ progress }: { progress: number }) => {
-      setScrollProgress(Math.max(0, Math.min(1, progress)));
+    const onLenisScroll = () => {
+      syncScrollIndicators();
       ScrollTrigger.update();
     };
     lenis.on('scroll', onLenisScroll);
@@ -58,46 +102,22 @@ export default function App() {
 
     document.fonts?.ready.then(() => {
       ScrollTrigger.refresh();
+      syncScrollIndicators();
     });
-    const refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 160);
+    const refreshTimer = window.setTimeout(() => {
+      ScrollTrigger.refresh();
+      syncScrollIndicators();
+    }, 160);
 
     return () => {
       window.clearTimeout(refreshTimer);
+      window.removeEventListener('scroll', syncScrollIndicators);
+      window.removeEventListener('resize', syncScrollIndicators);
       gsap.ticker.remove(tick);
       lenis.destroy();
       lenisRef.current = null;
     };
-  }, []);
-
-  useEffect(() => {
-    const ids: PortalSectionId[] = [
-      'overview',
-      'studio-showcase',
-      'client-engineering',
-      'rd-ventures',
-      'faq',
-    ];
-    const elements = ids
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
-
-    if (elements.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible.length > 0) {
-          setActiveSection(visible[0].target.id as PortalSectionId);
-        }
-      },
-      { rootMargin: '-25% 0px -45% 0px', threshold: [0.1, 0.35, 0.6] }
-    );
-
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  }, [syncScrollIndicators]);
 
   const handleNavigatePortal = (id: PortalSectionId) => {
     setActiveSection(id);
@@ -105,7 +125,7 @@ export default function App() {
     if (!target) return;
 
     if (lenisRef.current && !prefersReducedMotion()) {
-      lenisRef.current.scrollTo(target, { offset: -64, duration: 1.25 });
+      lenisRef.current.scrollTo(target, { offset: 0, duration: 1.25 });
     } else {
       target.scrollIntoView({
         behavior: prefersReducedMotion() ? 'auto' : 'smooth',
@@ -131,7 +151,7 @@ export default function App() {
 
       <HeaderPortal
         activeSection={activeSection}
-        scrollProgress={scrollProgress}
+        headerTone={headerTone}
         onNavigate={handleNavigatePortal}
         onOpenDialogue={() => openDialogueWith('Client Engineering', '')}
       />
